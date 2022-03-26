@@ -21,7 +21,7 @@ export const fetch_parcel_documents = async () => {
 
     const db = client.db("lewis_county_parcels")
     const collection = db.collection("parcel_number_locations");
-    const cursor = await collection.find({})
+    const cursor = await collection.find({"html": null})
 
     let documentsToUpdate: Array<any> = [];
 
