@@ -8,8 +8,8 @@ Gets the first pass at the parcels, and write the following shape to Mongo:
 
 ```json
 {
-    "parcelNumber": "parcelNumber",
-    "_id": "parcelNumber",
+    "parcelNumber": "${parcelNumber}",
+    "_id": "${parcelNumber}",
     "url": "https://parcels.lewiscountywa.gov${parcelNumber}"
 }
 ```
@@ -18,7 +18,18 @@ batch_mongo inserts as batch.
 
 # update_parcel_objects.ts
 
-Currently, this goes to earch pacel page and dumps the dom into mongo. Need to structure out the following:
+Currently, this goes to earch pacel page and dumps the dom into mongo.
+
+```json
+{
+    "parcelNumber": "${parcelNumber}",
+    "_id": "${parcelNumber}",
+    "url": "https://parcels.lewiscountywa.gov${parcelNumber}",
+    "html": "<ENTIRE_HTML_PAGE_HERE>"
+}
+```
+
+Need to structure out the following:
 
 - address
 - owner
