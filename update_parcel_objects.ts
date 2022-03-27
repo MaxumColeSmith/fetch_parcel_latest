@@ -21,7 +21,7 @@ export const fetch_parcel_documents = async () => {
 
     const db = client.db("lewis_county_parcels")
     const collection = db.collection("parcel_number_locations");
-    const cursor = await collection.find({"html": null})
+    const cursor = collection.find({"html": null})
 
     let documentsToUpdate: Array<any> = [];
 
@@ -40,7 +40,8 @@ export const fetch_parcel_documents = async () => {
         let html = await driver.findElement(By.xpath('//html'))
         const htmlString: string = await html.getAttribute('innerHTML');
         await collection.findOneAndReplace({ "_id": _id }, { ...doc, html: htmlString });
-        console.log(`updating ${url}`)
+        console.log(`updating ${url}`);
+        await driver.close();
     }
 }
 
