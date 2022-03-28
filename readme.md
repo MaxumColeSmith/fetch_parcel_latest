@@ -18,14 +18,15 @@ batch_mongo inserts as batch.
 
 # update_parcel_objects.ts
 
-Currently, this goes to earch pacel page and dumps the dom into mongo.
+Currently, this goes to earch parcel page and dumps the dom into mongo.
 
 ```json
 {
     "parcelNumber": "${parcelNumber}",
     "_id": "${parcelNumber}",
     "url": "https://parcels.lewiscountywa.gov${parcelNumber}",
-    "html": "<ENTIRE_HTML_PAGE_HERE>"
+    "assessedValue": "$547,000",
+    "...": "..."
 }
 ```
 
@@ -33,7 +34,7 @@ Sample Return:
 
 ```bash
 13603@DESKTOP-IE40UID MINGW64 ~/Repos/fetch_parcel_latest (main)
-$ npx ts-node update_parcel_objects.ts
+$ npx ts-node scripts/FILE_NAME_HERE.ts
 updating https://parcels.lewiscountywa.gov/028088059002
 updating https://parcels.lewiscountywa.gov/014727012001
 updating https://parcels.lewiscountywa.gov/750010102006
@@ -52,7 +53,6 @@ Need to structure out the following:
 - address
 - owner
 - account number
-- assessed value
 - total acres
 - description
 - property value history

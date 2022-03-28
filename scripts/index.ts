@@ -1,6 +1,7 @@
 import { write_parcels_mongo } from "./batch_mongo";
 
-const { Builder, By, Key } = require('selenium-webdriver');
+const { Builder, By } = require('selenium-webdriver');
+import chrome from 'selenium-webdriver/chrome';
 
 type IMain = {
 	searchPhrase: string;
@@ -12,7 +13,9 @@ const process_browser = async ({
 	pageToStart,
 }: IMain) => {
 	const builder = await new Builder();
-	let driver = builder.forBrowser('chrome').build();
+	let driver = builder.forBrowser('chrome')
+		.setChromeOptions(new chrome.Options().headless())
+		.build();
 	// If default count to 1000, that seems to be the max allowable return
 	await driver.get(`https://parcels.lewiscountywa.gov/search?q=${searchPhrase}&page=${pageToStart}&count=${1000}`);
 	
@@ -21,6 +24,7 @@ const process_browser = async ({
 	for (let assessedValue of assessedValueArray) {
 		// the search page returns a table with parcel numbers in the attribute data-href
 		const dataHref = await (assessedValue).getAttribute("data-href");
+		console.info(`pushing parcel: ${dataHref}`)
 		itemsToSave.push({
 			parcelNumber: dataHref,
 			_id: dataHref,

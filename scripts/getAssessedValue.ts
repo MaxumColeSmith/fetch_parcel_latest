@@ -1,8 +1,7 @@
 import { MongoClient, ServerApiVersion } from 'mongodb';
 import dotenv from 'dotenv';
-import  { Builder, By, Key } from 'selenium-webdriver'
+import  { Builder, By  } from 'selenium-webdriver'
 import chrome from 'selenium-webdriver/chrome';
-// const { Builder, By, Key } = require('selenium-webdriver');
 
 
 
@@ -21,7 +20,7 @@ export const fetch_parcel_documents = async () => {
 
     const db = client.db("lewis_county_parcels")
     const collection = db.collection("parcel_number_locations");
-    const cursor = collection.find({"html": null})
+    const cursor = collection.find({"assessedValue": null})
 
     let documentsToUpdate: Array<any> = [];
 
@@ -37,10 +36,16 @@ export const fetch_parcel_documents = async () => {
             .setChromeOptions(new chrome.Options().headless())
             .build();
         await driver.get(url);
-        let html = await driver.findElement(By.xpath('//html'))
-        const htmlString: string = await html.getAttribute('innerHTML');
-        await collection.findOneAndReplace({ "_id": _id }, { ...doc, html: htmlString });
-        console.log(`updating ${url}`);
+        // get assessedValue of parcel
+        try {
+            let assessedValueElement = await driver.findElement(By.xpath(`//dt[contains(text(), 'Assessed Value')]/../dd`));
+            const assessedValue = await assessedValueElement.getText()
+            console.log(`updating ${url}`);
+            await collection.findOneAndReplace({ "_id": _id }, { ...doc, assessedValue });
+        } catch(e) {
+            console.info(e)
+        }
+        
         await driver.close();
     }
 }
