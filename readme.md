@@ -1,6 +1,6 @@
 # How To Get Started
 
-`npx ts-node index.ts` to run the fetch script.
+`npx ts-node scripts/index.ts` to run the fetch script.
 
 # index.ts
 
